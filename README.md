@@ -31,23 +31,23 @@ default.  Pick one.
 There is also a werkzeug interface so that an SPDX file can be
 delivered via HTTP.  To use, create a simple wsgi file as follows:
 
-> from apt2sbom.wsbom import app as application
->
-> # application = create_app(_name_)
+    from apt2sbom.wsbom import app as application  
+    application = create_app(\_name\_)
+
 
 and call that file from your httpd. An apache example follows:
 
- > WSGIScriptAlias /.well-known/sbom /usr/lib/cgi-bin/sbom.wsgi
- > WSGIPassAuthorization On
+    WSGIScriptAlias /.well-known/sbom /usr/lib/cgi-bin/sbom.wsgi
+    WSGIPassAuthorization On
 
 When this is done, a very simple password file is expected in
 /etc/sbom.users:
 
-{
-  "user" : "password",
-  "otheruser" : "otherpassword",
-  ...
-}
+    {
+       "user" : "password",
+       "otheruser" : "otherpassword",
+        ...
+    }
 
 The passwords aren't hashed.  This is clearly something that has to
 be addressed in the future.
