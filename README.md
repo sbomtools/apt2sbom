@@ -5,7 +5,8 @@ software package inventory to an SPDX file.  You are in the wrong
 place if you are not running Ubuntu.
 
 The package is under active development.  Don't be surprised if
-something doesn't work quite right.
+something doesn't work quite right.  please see CONTRIBUTING.md for
+details.
 
 ## Building
 
@@ -17,6 +18,8 @@ Building is easy:
 4. pip3 install that file
 
 Do this, of course, on a Ubuntu system.
+
+## Usage
 
 To use the CLI tool:
 
