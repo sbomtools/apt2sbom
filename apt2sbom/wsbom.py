@@ -3,6 +3,7 @@ from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
 from apt2sbom.dp2yaml import toyaml
 from apt2sbom.dp2json import tojson
+from apt2sbom.dp2cdx import tocyclonedx
 import json, requests
 
 with open("/etc/sbom.users","r") as f:
@@ -24,6 +25,8 @@ def return_sbom():
    if ( "application/json" in request.accept_mimetypes or
         "application/spdx+json" in request.accept_mimetypes ):
       return Response(tojson(),mimetype="application/spdx+json")
+   elif ( "application/vnd.cyclonedx+json" in request.accept_mimetypes):
+      return Response(tocyclonedx(),mimetype="application/vnd.cyclonedx+json")
    return Response(toyaml(),mimetype="text/spdx")
 
 
@@ -36,4 +39,6 @@ def search_sbom(pattern = None):
    if ( "application/json" in request.accept_mimetypes or
 	"application/spdx+json" in request.accept_mimetypes ):
       return Response(tojson(pattern),mimetype="application/spdx+json")
+   elif ( "application/vnd.cyclonedx+json" in request.accept_mimetypes):
+      return Response(tocyclonedx(pattern),mimetype="application/vnd.cyclonedx+json")
    return Response(toyaml(pattern),mimetype="text/spdx")

@@ -1,8 +1,8 @@
 # Welcome to apt2sbom
 
 This package contains a library and a CLI tool to convert a Ubuntu
-software package inventory to an SPDX file.  You are in the wrong
-place if you are not running Ubuntu.
+software package inventory to a software bill of materials.  You are
+in the wrong place if you are not running Ubuntu.
 
 The package is under active development.  Don't be surprised if
 something doesn't work quite right.  please see CONTRIBUTING.md for
@@ -23,12 +23,13 @@ Do this, of course, on a Ubuntu system.
 
 To use the CLI tool:
 
-% apt2sbom (--json|--yaml)
+    % apt2sbom (--json|--yaml|--cyclonedx [--pip])
 
-Will produce either JSON or YAML forms of an SPDX file. There is no
-default.  Pick one.
+Will produce either JSON or YAML forms of an SPDX file, or the JSON form of a CycloneDX file . There is no default.  Pick one.
 
-There is also a werkzeug interface so that an SPDX file can be
+To include python packages, add --pip.
+
+There is also a werkzeug interface so that an SBOM file can be
 delivered via HTTP.  To use, create a simple wsgi file as follows:
 
     from apt2sbom.wsbom import app as application  
@@ -52,3 +53,4 @@ When this is done, a very simple password file is expected in
 The passwords aren't hashed.  This is clearly something that has to
 be addressed in the future.
 
+The type of SBOM returned depends on the Accepts: header sent.
