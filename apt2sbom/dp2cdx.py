@@ -99,7 +99,6 @@ def tocyclonedx(pattern = None,dopip=False):
                     
         pkgs.append(p)
 
-
     if dopip:
         pips = getpip()
         for pk in pips:
@@ -107,17 +106,16 @@ def tocyclonedx(pattern = None,dopip=False):
                 if not re.match(pattern,pk['Name']):
                     continue
             p={}
-            p["name"]=pk['Name']
-            p['type']='application'
-            p["version"] = pk['Version']
-            p["bomref"] = pk['Name']
+            p["name"]=pk["Name"]
+            p['type']="application"
+            p["version"] = pk["Version"]
+            p["bomref"] = pk["Name"]
             p["supplier"] = {
-                "name" + pk['Author']
+                "name" : pk["Author"]
                 }
-# + ' <' + pk['Author-email'] + '>'
             try:
-                p['externalReferences'] = [ {
-                    "url" : pk['homepage'],
+                p["externalReferences"] = [ {
+                    "url" : pk["homepage"],
                     "type" : "website"
                     }]
             except:

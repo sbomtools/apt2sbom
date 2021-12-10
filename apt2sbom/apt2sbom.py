@@ -18,8 +18,5 @@ def cli():
     elif args.yaml:
         out=toyaml()
     else:
-        out=tocyclonedx()
+        out=tocyclonedx(dopip=args.pip)
     print(out)
-
-
-
