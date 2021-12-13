@@ -1,3 +1,7 @@
+"""
+Routines to call from werkzeug to enable simple sbom web service.
+"""
+
 from flask import Flask,Response, request
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash

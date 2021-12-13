@@ -1,23 +1,29 @@
 #!python
-
-from apt.cache import Cache,Package,Version
-from datetime import datetime
-import re, json
-from .piplist import getpip
+"""
+routine to convert apt and pip information to CycloneDX.
+"""
+import re
+import json
 from uuid import uuid4
+from datetime import datetime
+from apt.cache import Cache
+from .piplist import getpip
 
 def tocyclonedx(pattern = None,dopip=False):
+    """
+    Routine to convert apt information to CycloneDx.
+    """
     pkgs = [ ]
     deps = []
 
-    s = {
+    sbom = {
         "bomFormat": "CycloneDX",
         "specVersion": "1.3",
         "serialNumber": "urn:uuid:" + str(uuid4()),
         "version": 1
         }
-    m= {
-        "timestamp" : str(re.sub('\..*$','',datetime.now().isoformat())) + 'Z',
+    meta = {
+        "timestamp" : str(re.sub(r'..*$','',datetime.now().isoformat())) + 'Z',
         "tools" : [ {
             "vendor" : "Eliot Lear",
             "name" : "apt2sbom",
@@ -32,7 +38,7 @@ def tocyclonedx(pattern = None,dopip=False):
             }
         } ]
       }
-    s['metadata']= m
+    sbom['metadata']= meta
 
     cache=Cache()
 
@@ -40,93 +46,89 @@ def tocyclonedx(pattern = None,dopip=False):
         if not pkg.is_installed:
             continue
         if pattern:
-            if not re.match(pattern,pkg.name): 
-               continue
+            if not re.match(pattern,pkg.name):
+                continue
         ver = pkg.installed
-        r=ver.record
-        p = { }
-        p['type'] = 'application'
-        p["name"]=pkg.name
-        v=ver.version
-# This was necessary for SPDX, probably not so for Cyclone DX
-#        v=v.replace("~","-")
-#        v=v.replace(":","-")
-        p["bom-ref"] = pkg.name
-        p["version"] = ver.version
-        p["purl"] = "pkg:deb/ubuntu/" + pkg.name + "@" + ver.version +\
+        pack = { }
+        pack['type'] = 'application'
+        pack["name"]=pkg.name
+        rec_info=ver.record
+        pack["bom-ref"] = pkg.name
+        pack["version"] = ver.version
+        pack["purl"] = "pkg:deb/ubuntu/" + pkg.name + "@" + ver.version +\
             "?arch=" + ver.architecture
-        p["supplier"] = { "name" : r['Maintainer'] }
-        if not ver.uri == None and not ver.uri == "":
-            p['supplier']['url']= [ ver.uri ]
-        
-        h= []
+        pack["supplier"] = { "name" : rec_info['Maintainer'] }
+        if not ver.uri is None and not ver.uri == "":
+            pack['supplier']['url']= [ ver.uri ]
+
+        hashes= []
         try:
-            h.append({ "alg" : 'SHA-256',
+            hashes.append({ "alg" : 'SHA-256',
                        'content' : ver.sha256 })
-        except:
+        except SystemError:
             pass
         try:
-            h.append({ "alg" : 'SHA-1',
+            hashes.append({ "alg" : 'SHA-1',
                        'content' : ver.sha1 })
-        except:
+        except SystemError:
             pass
 
         try:
-            h.append({ "alg" : 'MD5',
+            hashes.append({ "alg" : 'MD5',
                        'content' : ver.md5 })
-        except:
+        except SystemError:
             pass
-        
-        if not h == []:
-            p['hashes'] = h
 
-        if not ver.homepage == '':
-            p['externalReferences'] = [ {
+        if hashes != []:
+            pack['hashes'] = hashes
+
+        if ver.homepage != '':
+            pack['externalReferences'] = [ {
                 "url" : ver.homepage,
                 "type" : "website"
             } ]
-        
-        if not ver.dependencies == []:
-            dep = { "ref" : p["bom-ref"] }
+
+        if ver.dependencies != []:
+            dep = { "ref" : pack["bom-ref"] }
             dees = []
-            
-            for d in ver.dependencies:
-                tname=re.sub(':any$','',d[0].name)
+
+            for dep_ent in ver.dependencies:
+                tname=re.sub(':any$','',dep_ent[0].name)
                 if tname in cache and cache[tname].is_installed and\
                    not tname in dees:
                     dees.append(tname)
-                                
-            if not dees == []:
+
+            if dees != []:
                 dep["dependsOn"] = dees
                 deps.append(dep)
-                    
-        pkgs.append(p)
+
+        pkgs.append(pack)
 
     if dopip:
         pips = getpip()
-        for pk in pips:
+        for pip in pips:
             if pattern:
-                if not re.match(pattern,pk['Name']):
+                if not re.match(pattern,pip['Name']):
                     continue
-            p={}
-            p["name"]=pk["Name"] + ".pip"
-            p['type']="application"
-            p["version"] = pk["Version"]
-            p["purl"] = "pkg:pypi/" + re.sub('_','-',p["name"].lower()) +\
-                "@" + p["version"]
-            p["bom-ref"] = pk["Name"] + ".pip"
-            p["supplier"] = {
-                "name" : pk["Author"]
+            pack={}
+            pack["name"]=pip["Name"] + ".pip"
+            pack['type']="application"
+            pack["version"] = pip["Version"]
+            pack["purl"] = "pkg:pypi/" + re.sub('_','-',pack["name"].lower()) +\
+                "@" + pack["version"]
+            pack["bom-ref"] = pip["Name"] + ".pip"
+            pack["supplier"] = {
+                "name" : pip["Author"]
                 }
             try:
-                p["externalReferences"] = [ {
-                    "url" : pk["homepage"],
+                pack["externalReferences"] = [ {
+                    "url" : pip["homepage"],
                     "type" : "website"
                     }]
-            except:
+            except KeyError:
                 pass
-            pkgs.append(p)
+            pkgs.append(pack)
 
-    s['components'] = pkgs
-    s['dependencies'] = deps
-    return(json.dumps(s))
+    sbom['components'] = pkgs
+    sbom['dependencies'] = deps
+    return json.dumps(sbom)

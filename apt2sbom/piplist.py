@@ -1,30 +1,34 @@
 #!python
+"""
+Routines to generate lists of python modules installed.
+"""
 
-import pip_api
 import re
-
-# this may be a bit cheeky
+import pip_api
 from pip_api._call import call
 
 # return an array of global packages.
 
 
 def getpip():
+    """
+    Generate a pip package list.
+    """
     pkglist = []
     try:
-        p=pip_api.installed_distributions()
+        pip=pip_api.installed_distributions()
     except:
         return []
-    
-    for d in p.keys():
-        args=["show",p[d].name]
+
+    for dep in pip.keys():
+        args=["show",pip[dep].name]
         attrs=re.split('\n',call(*args))
 
         if not attrs == []:
-            e={}
-            for a in attrs:
-                tlv=re.split(': ',a)
+            entry={}
+            for attr in attrs:
+                tlv=re.split(': ',attr)
                 if len(tlv) == 2:
-                    e[tlv[0]] = tlv[1]
-            pkglist.append(e)
+                    entry[tlv[0]] = tlv[1]
+            pkglist.append(entry)
     return pkglist
