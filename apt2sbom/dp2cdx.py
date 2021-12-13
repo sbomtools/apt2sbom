@@ -1,12 +1,8 @@
 #!python
 
-# import json
 from apt.cache import Cache,Package,Version
-from apt.package import Record
-from socket import gethostname
 from datetime import datetime
-import re
-import json
+import re, json
 from .piplist import getpip
 from uuid import uuid4
 
@@ -116,6 +112,8 @@ def tocyclonedx(pattern = None,dopip=False):
             p["name"]=pk["Name"] + ".pip"
             p['type']="application"
             p["version"] = pk["Version"]
+            p["purl"] = "pkg:pypi/" + re.sub('_','-',p["name"].lower()) +\
+                "@" + p["version"]
             p["bom-ref"] = pk["Name"] + ".pip"
             p["supplier"] = {
                 "name" : pk["Author"]
