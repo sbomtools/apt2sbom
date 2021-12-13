@@ -45,7 +45,7 @@ def tojson(pattern = None,dopip=False):
         p["SPDXID"] = "SPDXRef-dpkg2spdx." + pkg.name
         pkgids.append(p["SPDXID"])
         p["versionInfo"] = ver.version
-        p["filesAnalyzed"] = "false"
+        p["filesAnalyzed"] = False
         p["supplier"] = "Organization: " + r['Maintainer']
         p["homepage"]= ver.homepage
         h= []
@@ -100,7 +100,7 @@ def tojson(pattern = None,dopip=False):
                 p["homepage"] = pk['home-page']
             except:
                 pass
-            p["filesAnalyzed"] = "false"
+            p["filesAnalyzed"] = False
             p["downloadLocation"] = "http://spdx.org/rdf/terms#noassertion"
             p["licenseConcluded"] = "NOASSERTION"
 #            try:

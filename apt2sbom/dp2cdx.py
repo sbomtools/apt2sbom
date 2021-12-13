@@ -52,10 +52,13 @@ def tocyclonedx(pattern = None,dopip=False):
         p['type'] = 'application'
         p["name"]=pkg.name
         v=ver.version
-        v=v.replace("~","-")
-        v=v.replace(":","-")
+# This was necessary for SPDX, probably not so for Cyclone DX
+#        v=v.replace("~","-")
+#        v=v.replace(":","-")
         p["bom-ref"] = pkg.name
         p["version"] = ver.version
+        p["purl"] = "pkg:deb/ubuntu/" + pkg.name + "@" + ver.version +\
+            "?arch=" + ver.architecture
         p["supplier"] = { "name" : r['Maintainer'] }
         if not ver.uri == None and not ver.uri == "":
             p['supplier']['url']= [ ver.uri ]
