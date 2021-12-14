@@ -25,9 +25,3 @@ jobs:
     - name: Attempting install
       run: |
         pip install .
-    - name: Test drives
-      run: |
-        apt2sbom -y > /dev/null
-        apt2sbom -j > /dev/null
-        apt2sbom -c > /dev/null
-        apt2sbom -c -p > /dev/null
