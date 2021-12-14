@@ -72,14 +72,14 @@ def tojson(pattern = None,dopip=False):
         except SystemError:
             pass
 
-        if hashes != []:
+        if hashes:
             pack['checksums'] = hashes
 
-        if not ver.uri is None:
+        if ver.uri:
             pack["downloadLocation"]= ver.uri
         else:
             pack["downloadLocation"]=  "http://spdx.org/rdf/terms#noassertion"
-        if not ver.dependencies == []:
+        if ver.dependencies:
             deps[pkg.name] = []
             for dep in ver.dependencies:
                 tname=re.sub(':any$','',dep[0].name)

@@ -88,7 +88,7 @@ def tocyclonedx(pattern = None,dopip=False):
                 "type" : "website"
             } ]
 
-        if ver.dependencies != []:
+        if ver.dependencies:
             dep = { "ref" : pack["bom-ref"] }
             dees = []
 
@@ -98,7 +98,7 @@ def tocyclonedx(pattern = None,dopip=False):
                    not tname in dees:
                     dees.append(tname)
 
-            if dees != []:
+            if dees:
                 dep["dependsOn"] = dees
                 deps.append(dep)
 
