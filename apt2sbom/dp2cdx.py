@@ -79,7 +79,7 @@ def tocyclonedx(pattern = None,dopip=False):
         except SystemError:
             pass
 
-        if hashes != []:
+        if hashes:
             pack['hashes'] = hashes
 
         if ver.homepage != '':

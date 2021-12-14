@@ -17,10 +17,10 @@ def getpip():
     pkglist = []
     try:
         pip=pip_api.installed_distributions()
-    except:
+    except SystemError:
         return []
 
-    for dep in pip.keys():
+    for dep in pip:
         args=["show",pip[dep].name]
         attrs=re.split('\n',call(*args))
 
