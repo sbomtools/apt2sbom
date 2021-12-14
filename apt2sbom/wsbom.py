@@ -10,7 +10,7 @@ from apt2sbom.dp2yaml import toyaml
 from apt2sbom.dp2json import tojson
 from apt2sbom.dp2cdx import tocyclonedx
 
-with open("/etc/sbom.users","r") as f:
+with open("/etc/sbom.users","r",encoding="utf-8") as f:
     users = json.load(f)
 
 app = Flask(__name__)
