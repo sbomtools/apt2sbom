@@ -17,7 +17,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pylint
+	pip install flask flask_httpauth pip_api pylint
     - name: Analysing the code with pylint
       run: |
         pylint -dR0914,R0912,R0915,E0402 apt2sbom/*.py
