@@ -18,10 +18,7 @@ jobs:
       run: |
         sudo apt-get -y install python-apt
         python -m pip install --upgrade pip
-        pip install flask
-        pip install flask_httpauth
-        pip install pip_api
-        pip install pylint
+        pip install flask flask_httpauth pip_api pylint python-apt
     - name: Analysing the code with pylint
       run: |
         pylint -dR0914,R0912,R0915,R0401,R0801,E0401,E0402,C0206 apt2sbom/*.py
