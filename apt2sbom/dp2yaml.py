@@ -40,9 +40,9 @@ def toyaml(pattern = None):
             res+="PackageChecksum: SHA256: " + ver.sha256 + "\n"
         except SystemError:
             pass
-        try:
+        if not ver.uri is None and not ver.uri == "":
             res+="PackageDownloadLocation: " + ver.uri + "\n"
-        except TypeError:
+        else:
             res+="PackageDownloadLocation: NOASSERTION\n"
         res+="PackageLicenseConcluded: NOASSERTION" + "\n"
         res+="PackageLicenseDeclared: NOASSERTION" + "\n"
