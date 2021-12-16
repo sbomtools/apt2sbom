@@ -5,18 +5,13 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.8", "3.9", "3.10"]
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python-version }}
+        ref: fix-integration
     - name: Install dependencies
       run: |
-        sudo apt-get -y install python-apt
+        sudo apt-get -y install python3-apt
         python -m pip install --upgrade pip
         pip install flask flask_httpauth pip_api pylint
     - name: Analysing the code with pylint
@@ -25,3 +20,8 @@ jobs:
     - name: Attempting install
       run: |
         pip install .
+    - name: Try running
+      run: |
+        apt2sbom -c > /dev/null
+        apt2sbom -y > /dev/null
+        apt2sbom -j > /dev/null
