@@ -23,7 +23,7 @@ def tocyclonedx(pattern = None,dopip=False):
         "version": 1
         }
     meta = {
-        "timestamp" : str(re.sub(r'..*$','',datetime.now().isoformat())) + 'Z',
+        "timestamp": re.sub(r'[.].*$','',str(datetime.now().isoformat())) + 'Z',
         "tools" : [ {
             "vendor" : "Eliot Lear",
             "name" : "apt2sbom",
