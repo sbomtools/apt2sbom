@@ -8,7 +8,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: more-checks
+        ref: main
     - name: Install dependencies
       run: |
         sudo apt-get -y install python3-apt
