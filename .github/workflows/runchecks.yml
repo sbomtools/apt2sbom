@@ -1,4 +1,4 @@
-name: Pylint
+name: RunChecks
 
 on: [push]
 
@@ -8,12 +8,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: main
+        ref: more-checks
     - name: Install dependencies
       run: |
         sudo apt-get -y install python3-apt
         python -m pip install --upgrade pip
-        pip install flask flask_httpauth pip_api pylint
+        pip install flask flask_httpauth pip_api pylint jsonschema
     - name: Analysing the code with pylint
       run: |
         pylint -dR0914,R0912,R0915,R0401,R0801,E0401,E0402,C0206 apt2sbom/*.py
@@ -22,6 +22,8 @@ jobs:
         pip install .
     - name: Try running
       run: |
-        apt2sbom -c > /dev/null
+        apt2sbom -c > cy.json
+        python tests/validate.py tests/cyclonedx-schema.json cy.json
         apt2sbom -y > /dev/null
-        apt2sbom -j > /dev/null
+        apt2sbom -j > spdx.json
+        python tests/validate.py tests/spdx-schema.json spdx.json
