@@ -16,7 +16,7 @@ jobs:
         pip install flask flask_httpauth pip_api pylint jsonschema
     - name: Analysing the code with pylint
       run: |
-        pylint -dR0914,R0912,R0915,R0401,R0801,E0401,E0402,C0206 apt2sbom/*.py
+        pylint -dR1722,R0914,R0912,R0915,R0401,R0801,E0401,E0402,C0206 apt2sbom/*.py
     - name: Attempting install
       run: |
         pip install .
