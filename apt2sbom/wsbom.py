@@ -14,7 +14,7 @@ from apt2sbom.readconf import readconf
 conf=readconf("/etc/sbom.conf")
 
 if getuid() == 0:
-    raise RunTimeError("Not running as root")
+    raise RuntimeError("Not running as root")
 
 
 if 'do_auth' in conf and conf['do_auth'] is True:
