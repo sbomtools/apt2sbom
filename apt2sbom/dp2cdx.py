@@ -114,7 +114,7 @@ def tocyclonedx(pattern = None,dopip=False):
             pack["name"]=pip["Name"] + ".pip"
             pack['type']="application"
             pack["version"] = pip["Version"]
-            pack["purl"] = "pkg:pypi/" + re.sub('_','-',pip["Name"].lower()) +\
+            pack["purl"] = "pkg:pypi/" + re.sub('_','-',pack["name"].lower()) +\
                 "@" + pack["version"]
             pack["bom-ref"] = pack["name"]
             pack["supplier"] = {
