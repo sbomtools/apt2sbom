@@ -41,8 +41,22 @@ and call that file from your httpd. An apache example follows:
     WSGIScriptAlias /.well-known/sbom /usr/lib/cgi-bin/sbom.wsgi
     WSGIPassAuthorization On
 
-When this is done, a very simple password file is expected in
-/etc/sbom.users:
+There is a configuration file: /etc/sbom.conf
+
+It is in the form of a JSON object.  It currently has the following
+parameters and defaults as follows:
+
+    {
+       "do_auth": true,  # otherwise don't auth
+       "passwd_file": "/etc/sbom.users",  # where to find the passwds
+       "include_pip": false, # pip results take a long time
+       "pregen_file": null # only open and read this file; otherwise gen.
+    }
+
+Note- don't put comments in.  (ToDo)
+
+When this is done, a very simple password file is expected by default
+in /etc/sbom.users:
 
     {
        "user" : "password",
