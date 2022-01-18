@@ -13,9 +13,9 @@ from apt2sbom.readconf import readconf
 conf=readconf("/etc/sbom.conf")
 
 if 'do_auth' in conf and conf['do_auth'] is True:
-    if not 'passwd_file' in conf:
+    if 'passwd_file' not in conf:
         raise ValueError('passwd_file')
-        
+
     try:
         with open(conf['passwd_file'],"r",encoding="utf-8") as f:
             users = json.load(f)
@@ -37,6 +37,9 @@ if 'do_auth' in conf and conf['do_auth']:
         return None
 
 def get_sbom(pattern=None):
+    """
+    generate SBOM once we are authenticated.
+    """
     if ( "application/json" in request.accept_mimetypes or
          "application/spdx+json" in request.accept_mimetypes ):
         return Response(tojson(pattern),mimetype="application/spdx+json")
@@ -64,7 +67,7 @@ else:
     def return_sbom():
         """ Return an SBOM with no params"""
         return get_sbom(None)
-    
+
     @app.route('/<pattern>',methods=['GET'])
     def search_sbom(pattern = None):
         """ return sbom with a search param """

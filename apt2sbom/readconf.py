@@ -27,4 +27,3 @@ def readconf(conffile):
         print(f'Error: {j_error}')
         conf={}
     return conf
-
