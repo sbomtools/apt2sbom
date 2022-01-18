@@ -3,6 +3,7 @@ Routines to call from werkzeug to enable simple sbom web service.
 """
 
 import json
+from os import getuid
 from flask import Flask,Response, request
 from flask_httpauth import HTTPBasicAuth
 from apt2sbom.dp2yaml import toyaml
@@ -11,6 +12,10 @@ from apt2sbom.dp2cdx import tocyclonedx
 from apt2sbom.readconf import readconf
 
 conf=readconf("/etc/sbom.conf")
+
+if getuid() == 0:
+    raise RunTimeError("Not running as root")
+
 
 if 'do_auth' in conf and conf['do_auth'] is True:
     if 'passwd_file' not in conf:
@@ -40,6 +45,18 @@ def get_sbom(pattern=None):
     """
     generate SBOM once we are authenticated.
     """
+    if 'pre_gen' in conf and conf['pre_gen']:
+        if 'sbom_type' in conf:
+            sbom_mime=conf['sbom_type']
+        else:
+            raise ValueError("sbom_type required and not set.")
+        try:
+            with open(conf['pre_gen'],"r",encoding="utf-8") as sbom_fp:
+                sbom=sbom_fp.read()
+            return Response(sbom,mimetype=sbom_mime)
+        except OSError as sbom_error:
+            return Response(str(sbom_error),400)
+
     if ( "application/json" in request.accept_mimetypes or
          "application/spdx+json" in request.accept_mimetypes ):
         return Response(tojson(pattern),mimetype="application/spdx+json")

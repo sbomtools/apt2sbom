@@ -51,6 +51,7 @@ parameters and defaults as follows:
        "passwd_file": "/etc/sbom.users",  # where to find the passwds
        "include_pip": false, # pip results take a long time
        "pregen_file": null # only open and read this file; otherwise gen.
+       "sbom_type": null # the type of sbom.  must be set if using pre_gen file.
     }
 
 Note- don't put comments in.  (ToDo)
