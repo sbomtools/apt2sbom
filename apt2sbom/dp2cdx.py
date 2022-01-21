@@ -21,7 +21,7 @@ def tocyclonedx(pattern = None,dopip=False):
 
     sbom = {
         "bomFormat": "CycloneDX",
-        "specVersion": "1.3",
+        "specVersion": "1.4",
         "serialNumber": "urn:uuid:" + str(uuid4()),
         "version": 1
         }
