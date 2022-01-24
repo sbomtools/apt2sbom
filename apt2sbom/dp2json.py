@@ -32,7 +32,7 @@ def tojson(pattern = None,dopip=False):
         "name" : "dpkg2spdx-" + gethostname(),
         "documentNamespace" : "https://" + gethostname() + "/.well-known/transparency/sbom"
     }
-    cinfo["creators"] =  [ "Tool: sbomOMatic-ubuntu-1.0" ]
+    cinfo["creators"] =  [ "Tool: apt2sbom-ubuntu-1.0" ]
     cinfo["created"] = str(re.sub(r'..*$','',datetime.now().isoformat())) + 'Z'
 
     sbom['creationInfo']= cinfo

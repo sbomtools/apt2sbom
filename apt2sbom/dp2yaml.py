@@ -15,9 +15,9 @@ def toyaml(pattern = None):
     Function to convert APT information to YAML.
     """
     res="SPDXVersion: SPDX-2.2\nDataLicense: CC0-1.0\nSPDXID: SPDXRef-DOCUMENT"
-    res+="DocumentName: dpkg2spdx-" + gethostname() + "\n"
+    res+="DocumentName: apt2sbom-" + gethostname() + "\n"
     res+="DocumentNamespace: https://" + gethostname() + "/.well-known/transparency/sbom\n"
-    res+="Creator: Tool: sbomOMatic-ubuntu-1.0\n"
+    res+="Creator: Tool: apt2sbom-ubuntu-1.0\n"
     res+="Created: " + str(re.sub(r'..*$','',datetime.now().isoformat())) + 'Z\n\n'
 
     cache=Cache()
@@ -31,7 +31,7 @@ def toyaml(pattern = None):
         ver = pkg.installed
         rec_info=ver.record
         clean_ver = ver.version.replace("[:~]","-")
-        res+="SPDXID: SPDXRef-dpkg2spdx." + pkg.name + "." + \
+        res+="SPDXID: SPDXRef-apt2sbom." + pkg.name + "." + \
             clean_ver +"\n"
         res+="PackageName: " + pkg.name + "\n"
         res+="PackageVersion: " + clean_ver + "\n"
