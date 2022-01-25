@@ -29,7 +29,7 @@ def tojson(pattern = None,dopip=False):
         "spdxVersion" : "SPDX-2.2",
         "SPDXID" : "SPDXRef-DOCUMENT",
         "dataLicense" : "CC0-1.0",
-        "name" : "dpkg2spdx-" + gethostname(),
+        "name" : "apt2sbom-" + gethostname(),
         "documentNamespace" : "https://" + gethostname() + "/.well-known/transparency/sbom"
     }
     cinfo["creators"] =  [ "Tool: apt2sbom-ubuntu-1.0" ]
@@ -50,7 +50,7 @@ def tojson(pattern = None,dopip=False):
         rec_info=ver.record
         pack = { }
         pack["name"]=pkg.name
-        pack["SPDXID"] = "SPDXRef-dpkg2spdx." + pkg.name
+        pack["SPDXID"] = "SPDXRef-apt2sbom." + pkg.name
         pkgids.append(pack["SPDXID"])
         pack["versionInfo"] = re.sub("[:~]","-",ver.version)
         pack["filesAnalyzed"] = False
@@ -103,7 +103,7 @@ def tojson(pattern = None,dopip=False):
             pack={}
             pack["name"]=pip['Name']
             pack["versionInfo"] = pip['Version']
-            pack["SPDXID"] = "SPDXRef-dpkg2spdx.pip." + pip['Name']
+            pack["SPDXID"] = "SPDXRef-apt2sbom.pip." + pip['Name']
             pack["supplier"] = "Organization: " + pip['Author'] + ' <'\
                 + pip['Author-email'] + '>'
             try:
@@ -122,8 +122,8 @@ def tojson(pattern = None,dopip=False):
     sbom['documentDescribes'] = pkgids
     for pname in deps:
         for dep in deps[pname]:
-            rec_info = { 'spdxElementId' : "SPDXRef-dpkg2spdx." + dep,
-                  'relatedSpdxElement' : "SPDXRef-dpkg2spdx." + pname,
+            rec_info = { 'spdxElementId' : "SPDXRef-apt2sbom." + dep,
+                  'relatedSpdxElement' : "SPDXRef-apt2sbom." + pname,
                   'relationshipType' : 'DEPENDENCY_OF'
                  }
             rels.append(rec_info)
