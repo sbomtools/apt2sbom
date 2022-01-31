@@ -122,7 +122,7 @@ def tojson(pattern = None,dopip=False):
     sbom['documentDescribes'] = pkgids
     for pname in deps:
         for dep in deps[pname]:
-            rec_info = { 
+            rec_info = {
                   'spdxElementId' : "SPDXRef-apt2sbom." + pname,
                   'relationshipType' : 'DEPENDS_ON',
                   'relatedSpdxElement' : "SPDXRef-apt2sbom." + dep
